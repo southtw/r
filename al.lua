@@ -2,14 +2,14 @@
 
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
 
-local Window = Library.CreateLib("anime life extra", "Serpent")
+local Window = Library.CreateLib("$10000 script", "Sentinel")
 
 local maintab = Window:NewTab("main")
 local auto = Window:NewTab("autofarm")
 
 local nigger = maintab:NewSection("teleport")
-local nigga = maintab:NewSection("j*bs")
-local misc = maintab:NewSection("misc")
+local nigga = maintab:NewSection("jobs")
+--local misc = maintab:NewSection("misc")
 local afs = auto:NewSection("main")
 
 nigger:NewButton("home (default)", "", function()
@@ -36,14 +36,15 @@ StartJob:FireServer(
 )
 end)
 
+--[[
 misc:NewButton("sleep (default)", "", function()
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Use = ReplicatedStorage.Systems.Objects.Members.Bed.Use 
 
 local SpawnStreet = workspace.HousingUnits.SpawnStreet
-local Phonk1 = SpawnStreet.Units["18"]
-local Furniture = Phonk1.Home.Furniture
+local --random = SpawnStreet.Units["%s"] --nigger developer
+local Furniture = --random.Home.Furniture
 local Seat = Furniture["13"].Server.Seat
 
 Use:FireServer(
@@ -51,6 +52,7 @@ Use:FireServer(
     Seat
 )
 end)
+--]]
 
 afs:NewButton("load", "pyro hub", function()
     shared.discord_key = "BREAKING_BAD"
