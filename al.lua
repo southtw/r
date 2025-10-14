@@ -20,6 +20,14 @@ Warp:InvokeServer(
 )
 end)
 
+nigger:NewButton("shop (default)", "", function()
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Warp = ReplicatedStorage.Systems.Teleport.Warp
+Warp:InvokeServer(
+    Vector3.new(-1179, 63, 1982)
+)
+end)
+
 nigger:NewButton("sword cutting", "", function()
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Warp = ReplicatedStorage.Systems.Teleport.Warp
@@ -28,7 +36,7 @@ Warp:InvokeServer(
 )
 end)
 
-nigga:NewButton("sword cutting", "", function()
+nigga:NewButton("sword cutting", "you need to teleport first", function()
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local StartJob = ReplicatedStorage.Systems.Jobs.StartJob
 StartJob:FireServer(
@@ -54,7 +62,12 @@ Use:FireServer(
 end)
 --]]
 
-afs:NewButton("load", "pyro hub", function()
+afs:NewButton("load (needed)", "pyro hub", function()
+    shared.discord_key = "BREAKING_BAD"
+loadstring(game:HttpGet("https://pyro.delivery/bundle.lua"))()
+end)
+
+afs:NewButton("auto food + job", "test", function()
     shared.discord_key = "BREAKING_BAD"
 loadstring(game:HttpGet("https://pyro.delivery/bundle.lua"))()
 end)
