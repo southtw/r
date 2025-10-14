@@ -2,6 +2,8 @@ local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHept
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+
+
 local JobEnded = ReplicatedStorage.Systems.Jobs.JobEnded
 local BuyItem = ReplicatedStorage.Systems.Shop.BuyItem
 local ConsumeFood = ReplicatedStorage.Systems.Food.ConsumeFood
@@ -13,11 +15,11 @@ local isProcessing = false
 
 local Window = Library.CreateLib("$10000 script", "Midnight")
 
-local MainTab = Window:NewTab("Main")
-local MainSection = MainTab:NewSection("Auto Farm")
+local MainTab = Window:NewTab("main")
+local MainSection = MainTab:NewSection("auto farm")
 
 local labelaf = MainSection:NewLabel("af state: ")
-MainSection:NewToggle("Auto Farm", "Automatically farm sword cutting job", function(state)
+MainSection:NewToggle("sword cutting", "Automatically farm sword cutting job", function(state)
     autoFarmEnabled = state
     if state then
         labelaf:UpdateLabel("af state: Enabled")
@@ -64,7 +66,7 @@ end)
 
 -- Info Section
 local InfoTab = Window:NewTab("logs")
-local InfoSection = InfoTab:NewSection("Script Info")
+local InfoSection = InfoTab:NewSection("lowk useless since i added notification z")
 InfoSection:NewLabel("log:")
 local labelafstate = InfoSection:NewLabel("")
 InfoSection:NewLabel("warn:")
@@ -148,3 +150,5 @@ nisec:NewLabel("make sure it 0 enegry")
 nisec:NewKeybind("toggle ui", "kys", Enum.KeyCode.F, function()
 	Library:ToggleUI()
 end)
+
+createNotification("Script Loaded", "nigga", 3)
