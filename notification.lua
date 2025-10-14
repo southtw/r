@@ -10,7 +10,7 @@ ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
 
 -- Notification function
-local function createNotification(title, message, duration)
+local function createnoti(title, message, duration)
     duration = duration or 3
     
     -- Create notification frame

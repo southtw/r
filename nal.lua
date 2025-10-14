@@ -1,8 +1,7 @@
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+local noti = loadstring(game:HttpGet("https://raw.githubusercontent.com/southtw/r/refs/heads/main/notification.lua"))()
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-
-
 
 local JobEnded = ReplicatedStorage.Systems.Jobs.JobEnded
 local BuyItem = ReplicatedStorage.Systems.Shop.BuyItem
@@ -151,4 +150,4 @@ nisec:NewKeybind("toggle ui", "kys", Enum.KeyCode.F, function()
 	Library:ToggleUI()
 end)
 
-createNotification("Script Loaded", "nigga", 3)
+noti:createnoti("script loaded", "", 3)
