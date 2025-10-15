@@ -287,8 +287,6 @@ JobEnded.OnClientEvent:Connect(onJobEnded)
 
 local nigga = Window:NewTab("info")
 local nisec = nigga:NewSection("start a job first")
-nisec:NewLabel("make sure it end as 0 enegry")
-nisec:NewLabel("cash out is bugged")
 nisec:NewKeybind("toggle ui", "kys", Enum.KeyCode.H, function()
 	Library:ToggleUI()
 end)
