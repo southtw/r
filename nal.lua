@@ -1,5 +1,3 @@
--- basically a plug for pyro hub
-
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -94,10 +92,12 @@ local BuyItem = ReplicatedStorage.Systems.Shop.BuyItem
 local ConsumeFood = ReplicatedStorage.Systems.Food.ConsumeFood
 local Warp = ReplicatedStorage.Systems.Teleport.Warp
 local StartJob = ReplicatedStorage.Systems.Jobs.StartJob
---local ClaimBank = ReplicatedStorage.Systems.Jobs.ClaimBank
+local ClaimBank = ReplicatedStorage.Systems.Jobs.ClaimBank
 
 local autoFarmEnabled = false
 local isProcessing = false
+local webhookEnabled = false
+local webhookURL = ""
 
 local Window = Library.CreateLib("anime life extra ($10000 script)", "Midnight")
 
@@ -122,7 +122,6 @@ MainSection:NewToggle("sword cutting", "Automatically farm sword cutting job", f
         labelaf:UpdateLabel("af state: Disabled")
     end
 end)
-
 
 local ControlSection = MainTab:NewSection("misc")
 --[[
@@ -163,21 +162,66 @@ ControlSection:NewButton("Start Sword Cutting Job", "Start the sword cutting job
 end)
 
 local InfoTab = Window:NewTab("logs")
-local InfoSection = InfoTab:NewSection("lowk useless since i added notification z")
+--[[
+local WebhookSection = InfoTab:NewSection("discord")
+
+WebhookSection:NewTextBox("webhook url", "enter your discord webhook url", function(txt)
+    webhookURL = txt
+    createnoti("webhook URL set", "", 3)
+end)
+
+WebhookSection:NewToggle("enable webhook", "send notifications to discord", function(state)
+    webhookEnabled = state
+    if state then
+        if webhookURL == "" then
+            createnoti("warn:", "please enter a webhook URL first", 2)
+            webhookEnabled = false
+        else
+            createnoti("enabled:", "discord webhook", 2)
+        end
+    else
+        createnoti("disabled:", "discord webhook", 2)
+    end
+end)
+
+local InfoSection = InfoTab:NewSection("script info -")
 InfoSection:NewLabel("log:")
 local labelafstate = InfoSection:NewLabel("")
 InfoSection:NewLabel("warn:")
 local labelafwarn = InfoSection:NewLabel("")
 
+local function sendWebhook(message)
+    if not webhookEnabled or webhookURL == "" then return end
+    
+    local success, err = pcall(function()
+        local http = game:GetService("HttpService")
+        local data = {
+            ["content"] = message,
+            ["username"] = "Goon Life",
+            ["avatar_url"] = "https://cdn.discordapp.com/attachments/1427844208806465588/1427846803272765641/image.png"
+        }
+        
+        local jsonData = http:JSONEncode(data)
+        http:PostAsync(webhookURL, jsonData, Enum.HttpContentType.ApplicationJson)
+    end)
+    
+    if not success then
+        warn("failed to send webhook:", err)
+    end
+end
+--]]
+
 local function onJobEnded()
     if not autoFarmEnabled or isProcessing then return end
     
     isProcessing = true
+
+    --sendWebhook("detected job ended")
     createnoti("job ended - ", "starting autofarm", 3)
     labelafstate:UpdateLabel("Job Ended - Starting Auto Process")
 
     wait(1)
---[[
+
     createnoti("cashing out money", "", 3)
     labelafstate:UpdateLabel("Cashing Out...")
     local success, err = pcall(function()
@@ -188,8 +232,8 @@ local function onJobEnded()
         labelafwarn:UpdateLabel("Failed to cash out:", err)
     end
     wait(0.5)
-    --]]
 
+    --sendWebhook("buying sd (4)")
     createnoti("buying sd (4)", "", 3)
     labelafstate:UpdateLabel("Buying 4 Sports Drinks...")
     for i = 1, 4 do
@@ -203,6 +247,7 @@ local function onJobEnded()
         wait(0.2)
     end
 
+    --sendWebhook("consuming sd (4)")
     createnoti("consuming sd (4)", "", 3)
     labelafstate:UpdateLabel("Consuming 4 Sports Drinks...")
     for i = 1, 4 do
@@ -216,6 +261,8 @@ local function onJobEnded()
         wait(0.2)
     end
 
+    --make sure sc job work
+    --sendWebhook("tping to sc")
     createnoti("tping to sc", "", 3)
     labelafstate:UpdateLabel("Teleporting to Sword Cutting...")
     wait(0.5)
@@ -229,6 +276,7 @@ local function onJobEnded()
 
     wait(1)
 
+    --sendWebhook("starting sc job")
     createnoti("starting sc job", "", 3)
     labelafstate:UpdateLabel("Starting Sword Cutting Job...")
     local success, err = pcall(function()
@@ -238,6 +286,7 @@ local function onJobEnded()
         createnoti("warn: failed to start job", "", 3)
         labelafwarn:UpdateLabel("Failed to start job:", err)
     end
+    --sendWebhook("waiting for next job")
     createnoti("waiting...", "", 3)
     labelafstate:UpdateLabel("waiting for next job end")
     isProcessing = false
@@ -249,8 +298,8 @@ local nigga = Window:NewTab("info")
 local nisec = nigga:NewSection("start a job first")
 nisec:NewLabel("make sure it end as 0 enegry")
 nisec:NewLabel("cash out is bugged")
-nisec:NewKeybind("toggle ui", "kys", Enum.KeyCode.F, function()
+nisec:NewKeybind("toggle ui", "kys", Enum.KeyCode.H, function()
 	Library:ToggleUI()
 end)
 
-createnoti("script loaded", "only made for sword cutting cuz its ez money", 3)
+createnoti("script loaded", "nigger", 3)
