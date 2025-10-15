@@ -1,3 +1,5 @@
+--/ 2.693.960
+
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -9,7 +11,9 @@ local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "NotificationGui"
 ScreenGui.ResetOnSpawn = false
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.DisplayOrder = 999999
+ScreenGui.IgnoreGuiInset = true
+ScreenGui.Parent = game:GetService("CoreGui")
 
 local function createnoti(title, message, duration)
     duration = duration or 3
@@ -21,6 +25,7 @@ local function createnoti(title, message, duration)
     notifFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
     notifFrame.BorderSizePixel = 0
     notifFrame.ClipsDescendants = true
+    notifFrame.ZIndex = 999999
     notifFrame.Parent = ScreenGui
 
     local accent = Instance.new("Frame")
@@ -28,18 +33,17 @@ local function createnoti(title, message, duration)
     accent.Position = UDim2.new(0, 0, 0, 0)
     accent.BackgroundColor3 = Color3.fromRGB(100, 150, 255)
     accent.BorderSizePixel = 0
+    accent.ZIndex = 999999
     accent.Parent = notifFrame
 
-    local glow = Instance.new("ImageLabel")
-    glow.Size = UDim2.new(1, 40, 1, 40)
-    glow.Position = UDim2.new(0, -20, 0, -20)
-    glow.BackgroundTransparency = 1
-    glow.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
-    glow.ImageColor3 = Color3.fromRGB(100, 150, 255)
-    glow.ImageTransparency = 0.8
-    glow.ScaleType = Enum.ScaleType.Slice
-    glow.SliceCenter = Rect.new(10, 10, 118, 118)
-    glow.Parent = notifFrame
+    task.spawn(function()
+        local hue = 0
+        while accent and accent.Parent do
+            hue = (hue + 0.01) % 1
+            accent.BackgroundColor3 = Color3.fromHSV(hue, 1, 1)
+            task.wait(0.03)
+        end
+    end)
 
     local titleLabel = Instance.new("TextLabel")
     titleLabel.Size = UDim2.new(1, -15, 0, 25)
@@ -51,6 +55,7 @@ local function createnoti(title, message, duration)
     titleLabel.Font = Enum.Font.GothamBold
     titleLabel.TextXAlignment = Enum.TextXAlignment.Left
     titleLabel.TextYAlignment = Enum.TextYAlignment.Top
+    titleLabel.ZIndex = 999999
     titleLabel.Parent = notifFrame
 
     local messageLabel = Instance.new("TextLabel")
@@ -64,21 +69,22 @@ local function createnoti(title, message, duration)
     messageLabel.TextXAlignment = Enum.TextXAlignment.Left
     messageLabel.TextYAlignment = Enum.TextYAlignment.Top
     messageLabel.TextWrapped = true
+    messageLabel.ZIndex = 999999
     messageLabel.Parent = notifFrame
 
     local corner = Instance.new("UICorner")
     corner.CornerRadius = UDim.new(0, 6)
     corner.Parent = notifFrame
 
-    notifFrame.Position = UDim2.new(1, 20, 0, 20)
+    notifFrame.Position = UDim2.new(0.5, -150, 1, 100)
     local slideIn = TweenService:Create(notifFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
-        Position = UDim2.new(1, -320, 0, 20)
+        Position = UDim2.new(0.5, -150, 1, -100)
     })
     slideIn:Play()
 
     task.delay(duration, function()
         local slideOut = TweenService:Create(notifFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.In), {
-            Position = UDim2.new(1, 20, 0, 20)
+            Position = UDim2.new(0.5, -150, 1, 100)
         })
         slideOut:Play()
         slideOut.Completed:Connect(function()
