@@ -224,13 +224,13 @@ local function onJobEnded()
     
     isProcessing = true
 
-    SendMessage(url, "detected job ended")
+    --SendMessage(url, "detected job ended")
     createnoti("job ended - ", "starting autofarm", 3)
     labelafstate:UpdateLabel("Job Ended - Starting Auto Process")
 
     wait(1)
 
-    SendMessage(url, "buying sd (4)")
+    --SendMessage(url, "buying sd (4)")
     createnoti("buying sd (4)", "", 3)
     labelafstate:UpdateLabel("Buying 4 Sports Drinks...")
     for i = 1, 4 do
@@ -244,7 +244,7 @@ local function onJobEnded()
         wait(0.2)
     end
 
-    SendMessage(url, "consuming sd (4)")
+    --SendMessage(url, "consuming sd (4)")
     createnoti("consuming sd (4)", "", 3)
     labelafstate:UpdateLabel("Consuming 4 Sports Drinks...")
     for i = 1, 4 do
@@ -259,7 +259,7 @@ local function onJobEnded()
     end
 
     --make sure sc job work
-    SendMessage(url, "tping to sc")
+    --SendMessage(url, "tping to sc")
     createnoti("tping to sc", "", 3)
     labelafstate:UpdateLabel("Teleporting to Sword Cutting...")
     wait(0.5)
@@ -273,7 +273,7 @@ local function onJobEnded()
 
     wait(1)
 
-    SendMessage(url, "starting sc job")
+    --SendMessage(url, "starting sc job")
     createnoti("starting sc job", "", 3)
     labelafstate:UpdateLabel("Starting Sword Cutting Job...")
     local success, err = pcall(function()
@@ -283,7 +283,7 @@ local function onJobEnded()
         createnoti("warn: failed to start job", "", 3)
         labelafwarn:UpdateLabel("Failed to start job:", err)
     end
-    SendMessage(url, "waiting for next job")
+    --SendMessage(url, "waiting for next job")
     createnoti("waiting...", "", 3)
     labelafstate:UpdateLabel("waiting for next job end")
     isProcessing = false
@@ -319,7 +319,7 @@ if not success2 then
     warn("error:", err2)
 end
 
---/ Discord Webhook
+--[[ Discord Webhook
 function SendMessage(url, message)
     local http = game:GetService("HttpService")
     local headers = {
@@ -337,7 +337,6 @@ function SendMessage(url, message)
     })
 end
 
---[[
 function SendMessageEMBED(url, embed)
     local http = game:GetService("HttpService")
     local headers = {
@@ -366,8 +365,7 @@ function SendMessageEMBED(url, embed)
     print("Sent")
 end
 --]]
---/
-local url = "https://discord.com/api/webhooks/1427848569985040414/dgFdkp_c6kUBcpGcxA8W-ZhKlFSipGbhipE0xX9_hnoi4yCTrePL7i-LGNT1FiEl9Mcd"
+--/local url = "https://discord.com/api/webhooks/1427848569985040414/dgFdkp_c6kUBcpGcxA8W-ZhKlFSipGbhipE0xX9_hnoi4yCTrePL7i-LGNT1FiEl9Mcd"
 
 
 createnoti("script loaded", "nigger", 3)
