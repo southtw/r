@@ -96,8 +96,8 @@ local ClaimBank = ReplicatedStorage.Systems.Jobs.ClaimBank
 
 local autoFarmEnabled = false
 local isProcessing = false
-local webhookEnabled = false
-local webhookURL = ""
+--local webhookEnabled = false
+--local webhookURL = ""
 
 local Window = Library.CreateLib("anime life extra ($10000 script)", "Midnight")
 
@@ -303,5 +303,15 @@ nisec:NewLabel("cash out is bugged")
 nisec:NewKeybind("toggle ui", "kys", Enum.KeyCode.H, function()
 	Library:ToggleUI()
 end)
+
+local success, err = pcall(function()
+    local calendar = LocalPlayer.PlayerGui:WaitForChild("HUD"):WaitForChild("TopRight"):WaitForChild("Calendar")
+    if calendar then
+        calendar:Destroy()
+    end
+end)
+if not success then
+warn("failed to patch", err)
+end
 
 createnoti("script loaded", "nigger", 3)
