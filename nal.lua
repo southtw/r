@@ -123,25 +123,26 @@ MainSection:NewToggle("sword cutting", "Automatically farm sword cutting job", f
 end)
 
 local ControlSection = MainTab:NewSection("misc")
---[[
 local labelml = ControlSection:NewLabel("log: ")
 
-ControlSection:NewButton("Buy 4 Sports Drinks", "Purchase 4 sports drinks", function()
+ControlSection:NewButton("buy 4 sports drinks", "Purchase 4 sports drinks", function()
     for i = 1, 4 do
         BuyItem:InvokeServer("SportsDrink")
         wait(0.1)
     end
+    createnoti("bought:", " sd (4)", 3)
     labelml:UpdateLabel("log: Bought 4 Sports Drinks")
 end)
 
-ControlSection:NewButton("Consume 4 Sports Drinks", "Consume 4 sports drinks", function()
+ControlSection:NewButton("consume 4 sports drinks", "Consume 4 sports drinks", function()
     for i = 1, 4 do
         ConsumeFood:FireServer("SportsDrink")
         wait(0.1)
     end
+    createnoti("consumed:", "sd (4)", 3)
     labelml:UpdateLabel("log: Consumed 4 Sports Drinks")
 end)
---]]
+
 
 ControlSection:NewButton("TP to Sword Cutting", "Teleport to sword cutting location", function()
     Warp:InvokeServer(Vector3.new(-1818, 63, 2055))
