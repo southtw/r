@@ -183,6 +183,7 @@ WebhookSection:NewToggle("enable webhook", "send notifications to discord", func
         createnoti("disabled:", "discord webhook", 2)
     end
 end)
+--]]
 
 local InfoSection = InfoTab:NewSection("script info -")
 InfoSection:NewLabel("log:")
@@ -190,6 +191,7 @@ local labelafstate = InfoSection:NewLabel("")
 InfoSection:NewLabel("warn:")
 local labelafwarn = InfoSection:NewLabel("")
 
+--[[
 local function sendWebhook(message)
     if not webhookEnabled or webhookURL == "" then return end
     
