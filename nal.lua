@@ -92,7 +92,6 @@ local BuyItem = ReplicatedStorage.Systems.Shop.BuyItem
 local ConsumeFood = ReplicatedStorage.Systems.Food.ConsumeFood
 local Warp = ReplicatedStorage.Systems.Teleport.Warp
 local StartJob = ReplicatedStorage.Systems.Jobs.StartJob
-local ClaimBank = ReplicatedStorage.Systems.Jobs.ClaimBank
 
 local autoFarmEnabled = false
 local isProcessing = false
@@ -223,17 +222,6 @@ local function onJobEnded()
     labelafstate:UpdateLabel("Job Ended - Starting Auto Process")
 
     wait(1)
-
-    createnoti("cashing out money", "", 3)
-    labelafstate:UpdateLabel("Cashing Out...")
-    local success, err = pcall(function()
-        ClaimBank:FireServer()
-    end)
-    if not success then
-        createnoti("warn: failed to cash out", "", 3)
-        labelafwarn:UpdateLabel("Failed to cash out:", err)
-    end
-    wait(0.5)
 
     --sendWebhook("buying sd (4)")
     createnoti("buying sd (4)", "", 3)
