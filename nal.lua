@@ -293,6 +293,8 @@ nisec:NewKeybind("toggle ui", "kys", Enum.KeyCode.H, function()
 	Library:ToggleUI()
 end)
 
+game:GetService("ReplicatedStorage").GameAnalyticsError
+
 local success, err = pcall(function()
     local calendar = LocalPlayer.PlayerGui:WaitForChild("HUD"):WaitForChild("TopRight"):WaitForChild("Calendar")
     if calendar then
@@ -300,7 +302,18 @@ local success, err = pcall(function()
     end
 end)
 if not success then
-warn("failed to patch", err)
+warn("error:", err)
+end
+
+--debug
+local success2, err2 = pcall(function()
+    local analyticsError = ReplicatedStorage:WaitForChild("GameAnalyticsError")
+    if analyticsError then
+        analyticsError:Destroy()
+    end
+end)
+if not success2 then
+    warn("error:", err2)
 end
 
 createnoti("script loaded", "nigger", 3)
