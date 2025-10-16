@@ -1,4 +1,7 @@
---/ 2.693.960
+local webhookUrl = ""
+
+--/ i create new shit here without even testing
+--/ so just use nalr version
 
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
 
@@ -6,6 +9,10 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
+
+local drinksToBuy = 4
+local drinksToConsume = 4
+local webhookEnabled = false
 
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "NotificationGui"
@@ -93,6 +100,56 @@ local function createnoti(title, message, duration)
     end)
 end
 
+-- Discord Webhook Functions
+function SendMessage(url, message)
+    if url == "" or not webhookEnabled then return end
+    local headers = {
+        ["Content-Type"] = "application/json"
+    }
+    local data = {
+        ["content"] = message
+    }
+    local body = HttpService:JSONEncode(data)
+    pcall(function()
+        request({
+            Url = url,
+            Method = "POST",
+            Headers = headers,
+            Body = body
+        })
+    end)
+end
+
+function SendMessageEMBED(url, embed)
+    if url == "" or not webhookEnabled then return end
+    local headers = {
+        ["Content-Type"] = "application/json"
+    }
+    local data = {
+        ["embeds"] = {
+            {
+                ["title"] = embed.title,
+                ["description"] = embed.description,
+                ["color"] = embed.color,
+                ["fields"] = embed.fields,
+                ["footer"] = {
+                    ["text"] = embed.footer.text
+                },
+                ["timestamp"] = os.date("!%Y-%m-%dT%H:%M:%SZ")
+            }
+        }
+    }
+    local body = HttpService:JSONEncode(data)
+    pcall(function()
+        request({
+            Url = url,
+            Method = "POST",
+            Headers = headers,
+            Body = body
+        })
+    end)
+end
+
 local JobEnded = ReplicatedStorage.Systems.Jobs.JobEnded
 local BuyItem = ReplicatedStorage.Systems.Shop.BuyItem
 local ConsumeFood = ReplicatedStorage.Systems.Food.ConsumeFood
@@ -120,9 +177,11 @@ local labelaf = MainSection:NewLabel("af state: ")
 MainSection:NewToggle("sword cutting", "Automatically farm sword cutting job", function(state)
     autoFarmEnabled = state
     if state then
+        SendMessage(webhookUrl, "# 🟢 auto farm enabled")
         createnoti("sword cutting: ", "Enabled", 3)
         labelaf:UpdateLabel("af state: Enabled")
     else
+        SendMessage(webhookUrl, "# 🔴 auto farm disabled")
         createnoti("sword cutting: ", "Disabled", 3)
         labelaf:UpdateLabel("af state: Disabled")
     end
@@ -131,18 +190,30 @@ end)
 local ControlSection = MainTab:NewSection("misc")
 local labelml = ControlSection:NewLabel("log: ")
 
-ControlSection:NewButton("buy 4 sports drinks", "Purchase 4 sports drinks", function()
-    for i = 1, 4 do
+ControlSection:NewSlider("Drinks to Buy", "Set number of sports drinks to buy", 10, 1, function(value)
+    drinksToBuy = value
+end)
+
+ControlSection:NewSlider("Drinks to Consume", "Set number of sports drinks to consume", 10, 1, function(value)
+    drinksToConsume = value
+end)
+
+ControlSection:NewButton("buy sports drinks", "Purchase 4 sports drinks", function()
+    for i = 1, drinksToBuy do
+        pcall(function()
         BuyItem:InvokeServer("SportsDrink")
+        end
         wait(0.1)
     end
     createnoti("bought:", " sd (4)", 3)
     labelml:UpdateLabel("log: Bought 4 Sports Drinks")
 end)
 
-ControlSection:NewButton("consume 4 sports drinks", "Consume 4 sports drinks", function()
-    for i = 1, 4 do
+ControlSection:NewButton("consume sports drinks", "Consume 4 sports drinks", function()
+    for i = 1, drinksToBuy do
+        pcall(function()
         ConsumeFood:FireServer("SportsDrink")
+        end
         wait(0.1)
     end
     createnoti("consumed:", "sd (4)", 3)
@@ -219,11 +290,42 @@ local function sendWebhook(message)
 end
 --]]
 
+local WebhookTab = Window:NewTab("webhook")
+local WebhookSection = WebhookTab:NewSection("discord webhook")
+
+WebhookSection:NewToggle("Enable Webhook", "Toggle webhook notifications", function(state)
+    webhookEnabled = state
+end)
+
+WebhookSection:NewButton("Test Webhook", "Send test message", function()
+    local embed = {
+        ["title"] = "Kamidere - Released",
+        ["description"] = " ",
+        ["color"] = 3447003,
+        ["fields"] = {
+            {
+                ["name"] = "Status",
+                ["value"] = "✅"
+            },
+            {
+                ["name"] = "Auto Farm",
+                ["value"] = autoFarmEnabled and "🟢" or "🔴"
+            }
+        },
+        ["footer"] = {
+            ["text"] = "Test notification"
+        }
+    }
+    SendMessageEMBED(webhookUrl, embed)
+end)
+
+--[[
 local function onJobEnded()
     if not autoFarmEnabled or isProcessing then return end
     
     isProcessing = true
 
+    jobCount = jobCount + 1
     --SendMessage(url, "detected job ended")
     createnoti("job ended - ", "starting autofarm", 3)
     labelafstate:UpdateLabel("Job Ended - Starting Auto Process")
@@ -319,6 +421,8 @@ if not success2 then
     warn("error:", err2)
 end
 
+--]]
+
 --[[ Discord Webhook
 function SendMessage(url, message)
     local http = game:GetService("HttpService")
@@ -367,5 +471,67 @@ end
 --]]
 --/local url = "https://discord.com/api/webhooks/1427848569985040414/dgFdkp_c6kUBcpGcxA8W-ZhKlFSipGbhipE0xX9_hnoi4yCTrePL7i-LGNT1FiEl9Mcd"
 
+local jobCount = 0
+local function onJobEnded()
+    if not autoFarmEnabled or isProcessing then return end
+   
+    isProcessing = true
+    jobCount = jobCount + 1
+    
+    wait(1)
+    
+    for i = 1, drinksToBuy do
+        pcall(function()
+            BuyItem:InvokeServer("SportsDrink")
+        end)
+        wait(0.2)
+    end
+    
+    for i = 1, drinksToConsume do
+        pcall(function()
+            ConsumeFood:FireServer("SportsDrink")
+        end)
+        wait(0.2)
+    end
+    
+    wait(0.5)
+    pcall(function()
+        Warp:InvokeServer(Vector3.new(-1818, 63, 2055))
+    end)
+    
+    wait(1)
+    pcall(function()
+        StartJob:FireServer("SwordCuttingGame")
+    end)
+    
+    -- Send embed notification
+    local embed = {
+        ["title"] = "Kamidere - Released",
+        ["description"] = "Job Completed",
+        ["color"] = 5763719,
+        ["fields"] = {
+            {
+                ["name"] = "Jobs Completed",
+                ["value"] = tostring(jobCount)
+            },
+            {
+                ["name"] = "Drinks Bought",
+                ["value"] = tostring(drinksToBuy)
+            },
+            {
+                ["name"] = "Drinks Used",
+                ["value"] = tostring(drinksToConsume)
+            }
+        },
+        ["footer"] = {
+            ["text"] = "Auto farming..."
+        }
+    }
+    SendMessageEMBED(webhookUrl, embed)
+    
+    isProcessing = false
+end
+
+JobEnded.OnClientEvent:Connect(onJobEnded)
 
 createnoti("script loaded", "nigger", 3)
