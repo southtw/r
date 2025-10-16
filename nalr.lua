@@ -1,4 +1,3 @@
---/ put your webhook url here (textbox bugged)
 local webhookUrl = ""
 
 --/ main
