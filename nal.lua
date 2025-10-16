@@ -104,7 +104,7 @@ local isProcessing = false
 --local webhookEnabled = false
 --local webhookURL = ""
 
-local Window = Library.CreateLib("nigga.wtf ($10000 script)", "Midnight")
+local Window = Library.CreateLib("kamidere ($10000 script)", "Midnight")
 
 local MainTab = Window:NewTab("main")
 local MainSection = MainTab:NewSection("aura farm")

@@ -13,7 +13,7 @@ local StartJob = ReplicatedStorage.Systems.Jobs.StartJob
 local autoFarmEnabled = false
 local isProcessing = false
 
-local Window = Library.CreateLib("anime life - released", "DarkTheme")
+local Window = Library.CreateLib("kamidere", "DarkTheme")
 
 local MainTab = Window:NewTab("main")
 local MainSection = MainTab:NewSection("auto farm")
